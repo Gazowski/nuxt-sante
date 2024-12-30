@@ -1,0 +1,17 @@
+.splitting .char {
+    opacity: 0;
+    animation-name: fadeIn;
+    animation-duration: .3s;
+    animation-timing-function: ease;
+    animation-delay: calc(var(--char-index) * .03s);
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

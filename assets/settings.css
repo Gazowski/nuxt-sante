@@ -1,0 +1,8 @@
+body {
+    /* font-family: var(--sante-font-primary);
+    font-size: var(--sante-root-font-size); */
+}
+
+h1 {
+    @apply text-4xl font-serif;
+}
