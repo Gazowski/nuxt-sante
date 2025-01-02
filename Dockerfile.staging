@@ -1,16 +1,27 @@
-# Utilisation d'une image Node.js LTS (Long Term Support)
+# Stage 1: Build the Nuxt application
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY package-lock.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# Stage 2: Production image
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Copier le dossier .output depuis le contexte local
-COPY .output ./output
-COPY package*.json ./
-RUN npm ci --omit=dev --production 
-# Important : Installer les dépendances dans l'image de production
-COPY node_modules ./node_modules
+COPY --from=builder /app/.output ./output
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/package-lock.json ./
+
 ENV NODE_ENV=staging
 ENV HOST=0.0.0.0
 EXPOSE 3010
 
-CMD ["node", "output/server/index.mjs"] 
+CMD ["node", "output/server/index.mjs"]

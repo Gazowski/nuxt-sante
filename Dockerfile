@@ -1,0 +1,16 @@
+# Utilisation d'une image Node.js LTS (Long Term Support)
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copier le dossier .output depuis le contexte local
+COPY .output ./output
+COPY package*.json ./
+RUN npm ci --omit=dev --production 
+# Important : Installer les dépendances dans l'image de production
+COPY node_modules ./node_modules
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+EXPOSE 3010
+
+CMD ["node", "output/server/index.mjs"] 
